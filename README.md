@@ -1,26 +1,40 @@
-## 📂 專案結構 (Project Structure)
-
-本專案採用前後端分離架構，主要目錄結構如下：
+## Project Structure
 
 ```text
-news-sentiment/
-├── backend/                  # Python 後端應用程式
-│   ├── app/
-│   │   ├── services/         # 核心業務邏輯
-│   │   │   └── analyzer.py   # 情感分析演算法與處理邏輯
-│   │   ├── main.py           # 應用程式入口點 (Entry Point)
-│   │   ├── schemas.py        # 資料模型與驗證 (Pydantic models)
-│   │   └── __init__.py
-│   └── requirements.txt      # Python 依賴套件列表
-│
-└── frontend/                 # React 前端應用程式 (Vite)
-    ├── src/
-    │   ├── components/       # UI 元件
-    │   │   ├── SearchForm.jsx # 搜尋與輸入表單
-    │   │   └── Results.jsx    # 分析結果顯示區域
-    │   ├── api.js            # 與後端通訊的 API 函式庫
-    │   ├── App.jsx           # 主頁面佈局
-    │   └── main.jsx          # React 渲染入口
-    ├── index.html            # 應用程式 HTML 模板
-    ├── vite.config.js        # Vite 建置設定檔
-    └── package.json          # Node.js 依賴套件列表
+├── README.md
+├── backend
+│   ├── app
+│   │   ├── main.py
+│   │   ├── models
+│   │   ├── routers
+│   │   │   └── stock.py
+│   │   ├── schemas
+│   │   │   └── stock.py
+│   │   └── services
+│   │       ├── ai_service.py
+│   │       ├── news_service.py
+│   │       └── stock_service.py
+│   ├── requirements.txt
+│   ├── scripts
+│   │   └── init_stock_list.py
+│   └── stocks.db
+└── frontend
+    ├── eslint.config.js
+    ├── index.html
+    ├── package-lock.json
+    ├── package.json
+    ├── public
+    │   └── vite.svg
+    ├── src
+    │   ├── App.css
+    │   ├── App.jsx
+    │   ├── assets
+    │   │   └── react.svg
+    │   ├── components
+    │   │   ├── SearchBar.css
+    │   │   └── SearchBar.jsx
+    │   ├── index.css
+    │   └── main.jsx
+    └── vite.config.js
+
+

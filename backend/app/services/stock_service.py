@@ -8,7 +8,7 @@ DB_PATH = 'stocks.db'
 def get_db_connection():
     # check_same_thread=False 是為了讓 FastAPI 多執行緒讀取 SQLite 不會報錯
     conn = sqlite3.connect(DB_PATH, check_same_thread=False)
-    conn.row_factory = sqlite3.Row # 讓我們可以用欄位名稱 (row['code']) 來取值
+    conn.row_factory = sqlite3.Row # 讓程式可以用欄位名稱 (row['code']) 來取值
     return conn
 
 def search_stocks_by_keyword(keyword: str) -> List[StockResponse]:
@@ -19,8 +19,8 @@ def search_stocks_by_keyword(keyword: str) -> List[StockResponse]:
     cursor = conn.cursor()
 
     # 使用 SQL 的 LIKE 語法進行模糊搜尋
-    # % 代表萬用字元，所以 '23%' 會找到所有 23 開頭的
-    # 這裡我們同時搜尋 代碼(code) 和 名稱(name)
+    # % 代表萬用字元
+    # 同時搜尋 代碼和名稱
     query = """
         SELECT code, name 
         FROM stock_list 
@@ -28,9 +28,9 @@ def search_stocks_by_keyword(keyword: str) -> List[StockResponse]:
         LIMIT 10
     """
     
-    # 加上 % 符號
-    search_pattern = f"{keyword}%" # 這裡用 '開頭是...' 的邏輯，比較符合自動完成的直覺
-    # 如果你想要 '包含' 的邏輯 (例如打 '積電' 也要找到 '台積電')，可以用 f"%{keyword}%"
+    # 模糊搜尋
+    search_pattern = f"%{keyword}%" 
+
     
     cursor.execute(query, (search_pattern, f"%{keyword}%")) # code 用開頭匹配，name 用包含匹配
     rows = cursor.fetchall()

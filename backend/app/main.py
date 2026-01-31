@@ -1,12 +1,12 @@
 # backend/app/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-# 1. 引入我們寫好的 router
+# 引入寫好的 router
 from app.routers import stock 
 
 app = FastAPI()
 
-# --- CORS 設定 (保持原本的) ---
+# 設定 CORS (Cross-Origin Resource Sharing)
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
@@ -20,7 +20,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 2. 關鍵步驟：把 Router 掛載上去！
 # 這樣 /api/stocks/search 才會生效
 app.include_router(stock.router)
 

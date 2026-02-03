@@ -35,7 +35,7 @@ StockMind AI 是一個結合即時股價與人工智慧新聞分析的 Web 應�
 
 ### 1. 取得專案
 ```bash
-git clone [https://github.com/yourusername/stock_sentimental.git]
+git clone [https://github.com/Mason0416/stock_sentimental.git]
 cd stock_sentimental
 ```
 

@@ -1,4 +1,34 @@
-/* 現有的樣式保留，新增以下內容 */
+/* ================= 全域設定 ================= */
+#root {
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center; /* 讓預設內容都置中 */
+}
+
+/* 主容器：限制寬度並置中 */
+.app-container {
+  max-width: 900px; /* 限制寬度，避免在大螢幕太寬 */
+  margin: 0 auto;   /* 水平置中 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* ================= 標題與搜尋 ================= */
+/* 可點擊的標題 (回到首頁) */
+.app-title {
+  cursor: pointer;
+  transition: transform 0.2s, color 0.2s;
+  user-select: none; /* 防止連點選取文字 */
+  margin-bottom: 2rem;
+}
+
+.app-title:hover {
+  transform: scale(1.05); /* 滑鼠移上去放大 */
+  color: #646cff;         /* 變色 */
+}
 
 .loading {
   font-size: 1.2rem;
@@ -6,50 +36,130 @@
   margin: 20px 0;
 }
 
+/* ================= 結果區塊 ================= */
 .result-container {
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: left;
+  width: 100%;       /* 佔滿容器寬度 */
+  text-align: left;  /* 內容靠左對齊比較好閱讀 */
+  animation: fadeIn 0.5s ease-in;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================= 1. 股價資訊 Header ================= */
+.stock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #444;
+}
+
+.stock-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+}
+
+.stock-code {
+  font-size: 1.2rem;
+  color: #888;
+  font-weight: normal;
+}
+
+.stock-price {
+  text-align: right;
+}
+
+.current-price {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-right: 15px;
+  display: block;
+}
+
+.price-change {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+/* 台灣股市顏色：紅漲綠跌 */
+.stock-price.up { color: #ff4d4d; }
+.stock-price.down { color: #00e676; }
+
+
+/* ================= 2. AI 分析卡片 (儀表板) ================= */
 .ai-card {
-  background-color: #2a2a2a; /* 深色背景 */
+  background-color: #2a2a2a;
   border-radius: 12px;
   padding: 24px;
   margin-bottom: 24px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
-.ai-header {
+/* AI 內容排版：左右分欄 */
+.ai-content-wrapper {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
-}
-
-/* 買賣建議顏色 */
-.verdict.Buy { color: #4caf50; }
-.verdict.Sell { color: #f44336; }
-.verdict.Hold { color: #ff9800; }
-
-.score-badge {
-  background: #444;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-}
-
-/* 關鍵詞標籤 */
-.keywords-box {
-  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* 手機版自動換行 */
   gap: 20px;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #444;
 }
 
-.keywords-group {
+.gauge-section {
   flex: 1;
+  min-width: 250px;
+  text-align: center;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.text-section {
+  flex: 1.5;
+  min-width: 300px;
+  padding: 10px;
+}
+
+/* 儀表板下方的建議標籤 (Buy/Sell) */
+.verdict-badge {
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-top: -10px; /* 把標籤往上拉一點 */
+}
+
+.verdict-badge.Buy {
+  background-color: rgba(255, 77, 77, 0.2);
+  color: #ff4d4d;
+  border: 1px solid #ff4d4d;
+}
+
+.verdict-badge.Sell {
+  background-color: rgba(0, 230, 118, 0.2);
+  color: #00e676;
+  border: 1px solid #00e676;
+}
+
+.verdict-badge.Hold, .verdict-badge.Neutral {
+  background-color: rgba(255, 195, 113, 0.2);
+  color: #FFC371;
+  border: 1px solid #FFC371;
+}
+
+/* 關鍵詞區塊 */
+.keywords-box {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #444;
 }
 
 .tags {
@@ -66,18 +176,24 @@
 }
 
 .p-tag {
-  background-color: rgba(76, 175, 80, 0.2);
-  color: #81c784;
-  border: 1px solid #2e7d32;
+  background-color: rgba(255, 77, 77, 0.15); /* 紅色系 */
+  color: #ff8a80;
+  border: 1px solid #ef5350;
 }
 
 .n-tag {
-  background-color: rgba(244, 67, 54, 0.2);
-  color: #e57373;
-  border: 1px solid #c62828;
+  background-color: rgba(0, 230, 118, 0.15); /* 綠色系 */
+  color: #69f0ae;
+  border: 1px solid #00c853;
 }
 
-/* 新聞列表 */
+/* ================= 3. 新聞列表 ================= */
+.news-section h3 {
+  border-bottom: 2px solid #444;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
 .news-list {
   display: grid;
   gap: 12px;
@@ -90,21 +206,24 @@
   border-radius: 8px;
   text-decoration: none;
   color: inherit;
-  transition: transform 0.2s;
+  transition: transform 0.2s, border-color 0.2s;
   border: 1px solid #333;
 }
 
 .news-item:hover {
-  transform: translateY(-2px);
-  border-color: #646cff;
+  transform: translateY(-3px);
+  border-color: #646cff; /* hover 時邊框變紫 */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
 }
 
 .news-title {
   font-weight: bold;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  font-size: 1.1rem;
+  line-height: 1.4;
 }
 
 .news-meta {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: #888;
 }

@@ -1,17 +1,25 @@
 from GoogleNews import GoogleNews
+from urllib.parse import urljoin
+
+def clean_url(url: str) -> str:
+    """
+    清除網址中多餘的 Google 追蹤參數，避免造成 404 錯誤
+    """
+    # 許多錯誤連結都是因為直接黏上了 &ved= 或 &usg=
+    if "&ved=" in url:
+        url = url.split("&ved=")[0]
+    if "&usg=" in url:
+        url = url.split("&usg=")[0]
+    return url
 
 def search_news_by_keyword(keyword: str):
     print(f"正在搜尋新聞: {keyword}")
-    # lang='zh-TW', region='TW' 確保抓到的是台灣繁體中文新聞
     googlenews = GoogleNews(lang='zh-TW', region='TW')
-    
-    # [修改] 設定為 '1d' 代表過去 24 小時 (當天)
     googlenews.set_period('1d') 
     googlenews.search(keyword)
     
     results = googlenews.result()
 
-    # [新增] 如果當天沒新聞，為了不讓畫面空白，自動切換成抓 7 天
     if not results:
         print("當天無新聞，嘗試擴大搜尋範圍至 7 天...")
         googlenews.clear()
@@ -19,20 +27,31 @@ def search_news_by_keyword(keyword: str):
         googlenews.search(keyword)
         results = googlenews.result()
     
-    # 限制前 10 筆，避免 AI 讀太久或 token 爆掉
+    # 抓 10 篇
     results = results[:10]
     
-    # 資料清洗
     news_data = []
     for item in results:
-        # GoogleNews 有時候會回傳空標題，過濾掉
-        if not item.get('title'):
+        title = item.get('title', '')
+        if not title:
             continue
-            
+        
+        raw_link = item.get('link', '')
+        
+        # 1. 先處理相對路徑 (./articles/...)
+        full_link = urljoin("https://news.google.com", raw_link)
+        
+        # 2. [新增] 清理追蹤參數，修復 404 問題
+        final_link = clean_url(full_link)
+
+        # 除錯用：印出來看看修正前後的差異
+        if raw_link != final_link:
+            print(f"修復連結: {raw_link} -> {final_link}")
+
         news_data.append({
-            "title": item.get('title'),
-            "link": item.get('link'),
-            "date": item.get('date'),
+            "title": title,
+            "link": final_link, # 使用清理過的連結
+            "date": item.get('date', ''),
             "source": item.get('media', 'Unknown'),
             "snippet": item.get('desc', '')
         })

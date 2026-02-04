@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar';
 import GaugeChart from 'react-gauge-chart';
 import './App.css';
@@ -7,11 +7,51 @@ function App() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  // [新增] 用來強制重置 SearchBar 的 key
   const [resetKey, setResetKey] = useState(0); 
 
+  // [新增] 收藏清單狀態 (初始值從 localStorage 讀取)
+  const [watchlist, setWatchlist] = useState(() => {
+    const saved = localStorage.getItem('stockWatchlist');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // [新增] 加入或移除收藏
+  const toggleWatchlist = (stockCode, stockName) => {
+    let newList;
+    const exists = watchlist.find(item => item.code === stockCode);
+
+    if (exists) {
+      // 如果已存在，就移除
+      newList = watchlist.filter(item => item.code !== stockCode);
+    } else {
+      // 如果不存在，就加入
+      newList = [...watchlist, { code: stockCode, name: stockName }];
+    }
+
+    setWatchlist(newList);
+    localStorage.setItem('stockWatchlist', JSON.stringify(newList));
+  };
+
+  // [新增] 檢查目前顯示的股票是否已收藏
+  const isWatched = (code) => {
+    return watchlist.some(item => item.code === code);
+  };
+
+  // [新增] 點擊收藏清單項目時，直接搜尋
+  const handleWatchlistClick = (code) => {
+    // 把代碼填入搜尋框 (選用，或是直接觸發搜尋)
+    handleSearch(code);
+  };
+
+  // [新增] 刪除單一收藏 (在清單頁面用)
+  const removeWatchlistItem = (e, code) => {
+    e.stopPropagation(); // 防止觸發點擊搜尋
+    const newList = watchlist.filter(item => item.code !== code);
+    setWatchlist(newList);
+    localStorage.setItem('stockWatchlist', JSON.stringify(newList));
+  };
+
   const handleSearch = async (searchTicker) => {
-    // ... (這部分不用動，維持原樣) ...
     setLoading(true);
     setData(null);
     setError(null);
@@ -29,25 +69,21 @@ function App() {
     }
   };
 
-  // [新增] 回到首頁的函式
   const handleReset = () => {
-    setData(null);   // 清空資料
-    setError(null);  // 清空錯誤
+    setData(null);
+    setError(null);
     setLoading(false);
-    setResetKey(prev => prev + 1); // 讓 SearchBar 重新渲染 (清空輸入框文字)
+    setResetKey(prev => prev + 1);
   };
 
   return (
     <div className="app-container">
-      {/* [修改] 加上 onClick 事件和 className */}
       <h1 className="app-title" onClick={handleReset} title="回到首頁">
         📈 StockMind AI
       </h1>
       
-      {/* [修改] 加上 key，這樣 resetKey 改變時，搜尋框也會被清空 */}
       <SearchBar key={resetKey} onSearch={handleSearch} />
 
-      {/* ... (以下載入中、錯誤、結果顯示區塊都維持原樣，不用動) ... */}
       {loading && <div className="loading">正在分析新聞數據，請稍候...</div>}
       
       {error && (
@@ -57,15 +93,50 @@ function App() {
         </div>
       )}
 
+      {/* [新增] 首頁收藏清單 (當沒有搜尋結果且沒在載入時顯示) */}
+      {!data && !loading && !error && (
+        <div className="watchlist-section">
+            <h3>❤️ 我的自選股 ({watchlist.length})</h3>
+            {watchlist.length === 0 ? (
+                <p className="empty-hint">你還沒有收藏任何股票，試著搜尋並點擊愛心按鈕吧！</p>
+            ) : (
+                <div className="watchlist-grid">
+                    {watchlist.map((stock) => (
+                        <div key={stock.code} className="watchlist-card" onClick={() => handleWatchlistClick(stock.code)}>
+                            <div className="card-info">
+                                <span className="card-code">{stock.code}</span>
+                                <span className="card-name">{stock.name}</span>
+                            </div>
+                            <button className="remove-btn" onClick={(e) => removeWatchlistItem(e, stock.code)} title="移除">
+                                ✕
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+      )}
+
+      {/* 分析結果頁面 */}
       {data && !error && (
         <div className="result-container">
-            {/* ... 這裡原本的程式碼都不用動 ... */}
             
-            {/* 1. 股價資訊 Header */}
+            {/* 1. 股價資訊 Header (加入收藏按鈕) */}
             <div className="stock-header">
-                <div className="stock-title">
-                    {data.stock_info.name} <span className="stock-code">({data.stock_info.code})</span>
+                <div className="stock-title-group">
+                    <div className="stock-title">
+                        {data.stock_info.name} <span className="stock-code">({data.stock_info.code})</span>
+                    </div>
+                    {/* [新增] 收藏按鈕 */}
+                    <button 
+                        className={`heart-btn ${isWatched(data.stock_info.code) ? 'active' : ''}`}
+                        onClick={() => toggleWatchlist(data.stock_info.code, data.stock_info.name)}
+                        title={isWatched(data.stock_info.code) ? "移除收藏" : "加入收藏"}
+                    >
+                        {isWatched(data.stock_info.code) ? '❤️ 已收藏' : '🤍 加入收藏'}
+                    </button>
                 </div>
+
                 {data.stock_info.price_info ? (
                     <div className={`stock-price ${parseFloat(data.stock_info.price_info.change) >= 0 ? 'up' : 'down'}`}>
                         <span className="current-price">{data.stock_info.price_info.price}</span>

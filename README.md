@@ -12,7 +12,7 @@ StockMind AI 是一個結合即時股價與人工智慧新聞分析的 Web 應�
     * 提供 0-100 的信心分數儀表板。
     * 自動標記「正向/負向」關鍵詞。
     * 生成簡潔的投資建議（Buy/Sell/Hold）與風險提示。
-* **💰 即時股價**：串接 `twstock` 顯示即時價格與漲跌幅。
+* **💰 即時股價**：串接 `yfinance` 顯示即時價格與漲跌幅。
 * **🚀 極速體驗**：內建 SQLite 快取機制 (Caching)，一小時內的重複查詢可秒開且不消耗 API 額度。
 * **📰 新聞聚合**：自動彙整相關財經新聞連結。
 
@@ -22,7 +22,7 @@ StockMind AI 是一個結合即時股價與人工智慧新聞分析的 Web 應�
 * **Framework**: FastAPI (Python)
 * **AI Model**: Google Gemini 2.0 Flash (`google-genai`)
 * **Database**: SQLite (用於儲存股票清單與分析快取)
-* **Tools**: `twstock` (股價), `GoogleNews` (新聞爬蟲)
+* **Tools**: `yfinance` (股價), `GoogleNews` (新聞爬蟲)
 
 ### Frontend (前端)
 * **Framework**: React 19 + Vite
@@ -119,6 +119,10 @@ npm run dev
 
 後端已內建 clean_url 機制修復大部分 Google News 轉址問題，請確認後端程式碼為最新版本。
 
+
+### 💡 最後提醒
+1.  **安裝新套件**：記得在 `backend` 資料夾下執行 `pip install -r requirements.txt`，確保 `yfinance` 有被安裝。
+2.  **重啟後端**：修改完 python 檔案後，記得重啟 `uvicorn`。
 
 ## Project Structure
 

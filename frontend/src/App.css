@@ -3,13 +3,12 @@
   width: 100%;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center; /* 讓預設內容都置中 */
+  text-align: center;
 }
 
-/* 主容器：限制寬度並置中 */
 .app-container {
-  max-width: 900px; /* 限制寬度，避免在大螢幕太寬 */
-  margin: 0 auto;   /* 水平置中 */
+  max-width: 900px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,29 +16,118 @@
 }
 
 /* ================= 標題與搜尋 ================= */
-/* 可點擊的標題 (回到首頁) */
 .app-title {
   cursor: pointer;
   transition: transform 0.2s, color 0.2s;
-  user-select: none; /* 防止連點選取文字 */
+  user-select: none;
   margin-bottom: 2rem;
+  color: var(--text-primary); /* [修改] 使用變數 */
 }
 
 .app-title:hover {
-  transform: scale(1.05); /* 滑鼠移上去放大 */
-  color: #646cff;         /* 變色 */
+  transform: scale(1.05);
+  color: var(--accent-color);
 }
 
 .loading {
   font-size: 1.2rem;
-  color: #646cff;
+  color: var(--accent-color);
   margin: 20px 0;
+}
+
+/* ================= 收藏清單區塊 ================= */
+.watchlist-section {
+    width: 100%;
+    max-width: 800px;
+    margin-top: 20px;
+    text-align: left;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.watchlist-section h3 {
+    border-bottom: 1px solid var(--border-color); /* [修改] */
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    color: var(--text-primary); /* [修改] */
+}
+
+.empty-hint {
+    color: var(--text-secondary); /* [修改] */
+    font-style: italic;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.watchlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.watchlist-card {
+    background-color: var(--bg-card); /* [修改] */
+    border: 1px solid var(--border-color); /* [修改] */
+    border-radius: 8px;
+    padding: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+    box-shadow: 0 2px 4px var(--shadow-color); /* [修改] */
+}
+
+.watchlist-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-code {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-primary); /* [修改] */
+}
+
+.card-name {
+    font-size: 0.9rem;
+    color: var(--text-secondary); /* [修改] */
+}
+
+/* 移除按鈕 */
+.remove-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary); /* [修改] */
+    box-shadow: none; /* 移除預設按鈕陰影 */
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 5px;
+    line-height: 1;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.remove-btn:hover {
+    background-color: rgba(255, 77, 77, 0.2);
+    color: #ff4d4d;
 }
 
 /* ================= 結果區塊 ================= */
 .result-container {
-  width: 100%;       /* 佔滿容器寬度 */
-  text-align: left;  /* 內容靠左對齊比較好閱讀 */
+  width: 100%;
+  text-align: left;
   animation: fadeIn 0.5s ease-in;
 }
 
@@ -53,27 +141,62 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #1e1e1e;
+  background-color: var(--bg-header); /* [修改] */
   padding: 20px;
   border-radius: 12px;
   margin-bottom: 20px;
-  border: 1px solid #444;
+  border: 1px solid var(--border-color); /* [修改] */
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.stock-title-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .stock-title {
   font-size: 2rem;
   font-weight: bold;
-  color: white;
+  color: var(--text-primary); /* [修改] */
 }
 
 .stock-code {
   font-size: 1.2rem;
-  color: #888;
+  color: var(--text-secondary); /* [修改] */
   font-weight: normal;
+}
+
+/* 愛心按鈕 */
+.heart-btn {
+    background: var(--bg-hover); /* [修改] */
+    border: 1px solid var(--border-color); /* [修改] */
+    color: var(--text-secondary); /* [修改] */
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: none;
+}
+
+.heart-btn:hover {
+    background: var(--bg-card);
+    border-color: var(--text-secondary);
+}
+
+.heart-btn.active {
+    background: rgba(255, 77, 77, 0.1);
+    border-color: #ff4d4d;
+    color: #ff4d4d;
 }
 
 .stock-price {
   text-align: right;
+  color: var(--text-primary); /* [修改] */
 }
 
 .current-price {
@@ -88,26 +211,26 @@
   font-weight: 500;
 }
 
-/* 台灣股市顏色：紅漲綠跌 */
 .stock-price.up { color: #ff4d4d; }
 .stock-price.down { color: #00e676; }
 
 
 /* ================= 2. AI 分析卡片 (儀表板) ================= */
 .ai-card {
-  background-color: #2a2a2a;
+  background-color: var(--bg-card); /* [修改] */
   border-radius: 12px;
   padding: 24px;
   margin-bottom: 24px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 6px var(--shadow-color); /* [修改] */
+  border: 1px solid var(--border-color); /* [新增] 讓淺色模式有邊框比較清楚 */
+  color: var(--text-primary); /* [修改] */
 }
 
-/* AI 內容排版：左右分欄 */
 .ai-content-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap; /* 手機版自動換行 */
+  flex-wrap: wrap;
   gap: 20px;
 }
 
@@ -121,22 +244,26 @@
   align-items: center;
 }
 
+.gauge-section h3 {
+    color: var(--text-primary);
+}
+
 .text-section {
   flex: 1.5;
   min-width: 300px;
   padding: 10px;
 }
 
-/* 儀表板下方的建議標籤 (Buy/Sell) */
 .verdict-badge {
   display: inline-block;
   padding: 5px 15px;
   border-radius: 20px;
   font-weight: bold;
   font-size: 1.2rem;
-  margin-top: -10px; /* 把標籤往上拉一點 */
+  margin-top: -10px;
 }
 
+/* 買賣標籤顏色維持原樣，因為是語意色 */
 .verdict-badge.Buy {
   background-color: rgba(255, 77, 77, 0.2);
   color: #ff4d4d;
@@ -155,11 +282,10 @@
   border: 1px solid #FFC371;
 }
 
-/* 關鍵詞區塊 */
 .keywords-box {
   margin-top: 15px;
   padding-top: 15px;
-  border-top: 1px solid #444;
+  border-top: 1px solid var(--border-color); /* [修改] */
 }
 
 .tags {
@@ -175,23 +301,25 @@
   font-size: 0.85rem;
 }
 
+/* 關鍵字標籤也維持原樣 */
 .p-tag {
-  background-color: rgba(255, 77, 77, 0.15); /* 紅色系 */
+  background-color: rgba(255, 77, 77, 0.15);
   color: #ff8a80;
   border: 1px solid #ef5350;
 }
 
 .n-tag {
-  background-color: rgba(0, 230, 118, 0.15); /* 綠色系 */
+  background-color: rgba(0, 230, 118, 0.15);
   color: #69f0ae;
   border: 1px solid #00c853;
 }
 
 /* ================= 3. 新聞列表 ================= */
 .news-section h3 {
-  border-bottom: 2px solid #444;
+  border-bottom: 2px solid var(--border-color); /* [修改] */
   padding-bottom: 10px;
   margin-bottom: 20px;
+  color: var(--text-primary); /* [修改] */
 }
 
 .news-list {
@@ -202,18 +330,18 @@
 .news-item {
   display: block;
   padding: 16px;
-  background: #1a1a1a;
+  background: var(--bg-card); /* [修改] */
   border-radius: 8px;
   text-decoration: none;
-  color: inherit;
+  color: var(--text-primary); /* [修改] */
   transition: transform 0.2s, border-color 0.2s;
-  border: 1px solid #333;
+  border: 1px solid var(--border-color); /* [修改] */
 }
 
 .news-item:hover {
   transform: translateY(-3px);
-  border-color: #646cff; /* hover 時邊框變紫 */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 12px var(--shadow-color);
 }
 
 .news-title {
@@ -221,9 +349,10 @@
   margin-bottom: 6px;
   font-size: 1.1rem;
   line-height: 1.4;
+  color: var(--text-primary);
 }
 
 .news-meta {
   font-size: 0.85rem;
-  color: #888;
+  color: var(--text-secondary); /* [修改] */
 }

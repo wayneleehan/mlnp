@@ -4,12 +4,19 @@ import json
 import os
 import time # [新增] 引入 time 用來休息
 from typing import List
+from dotenv import load_dotenv # [新增]
 from app.schemas.stock import NewsResponse, AIAnalysisResponse
 
 # 你的 API KEY
-GENAI_API_KEY = "Upload your own Google API key" 
+load_dotenv()
+GENAI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+# 檢查是否有讀到 Key
+if not GENAI_API_KEY:
+    raise ValueError("找不到 API Key！請確認 backend/.env 檔案是否存在且內容正確。")
 
 client = genai.Client(api_key=GENAI_API_KEY)
+
 
 def analyze_sentiment(stock_name: str, news_list: List[dict]) -> AIAnalysisResponse:
     

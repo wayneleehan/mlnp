@@ -1,10 +1,21 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
+# [新增] 股價資訊格式
+class StockPriceInfo(BaseModel):
+    price: str          # 現價
+    change: str         # 漲跌價差
+    change_percent: str # 漲跌幅
+    open: str           # 開盤
+    high: str           # 最高
+    low: str            # 最低
+    volume: str         # 成交量
+
 # 股票代碼 (維持不變)
 class StockResponse(BaseModel):
     code: str
     name: str
+    price_info: Optional[StockPriceInfo] = None
 
     class Config:
         from_attributes = True
@@ -26,7 +37,7 @@ class AIAnalysisResponse(BaseModel):
     positive_keywords: List[str] = [] # [新增] 正向關鍵詞
     negative_keywords: List[str] = [] # [新增] 負向關鍵詞
 
-# [新增] 總回應格式：把股票資訊、新聞、AI分析包在一起
+# 總回應格式
 class StockAnalysisResult(BaseModel):
     stock_info: StockResponse
     news: List[NewsResponse]

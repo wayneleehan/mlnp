@@ -3,9 +3,24 @@
   line-height: 1.5;
   font-weight: 400;
 
+  /* 預設 (深色模式) 的變數定義 */
+  --bg-main: #242424;          /* 網頁大背景 */
+  --bg-card: #2a2a2a;          /* 卡片背景 */
+  --bg-header: #1e1e1e;        /* 標題列背景 */
+  --bg-input: #1a1a1a;         /* 輸入框背景 */
+  --bg-hover: #333333;         /* 滑鼠移過去的顏色 */
+  
+  --text-primary: rgba(255, 255, 255, 0.87); /* 主要文字 */
+  --text-secondary: #aaaaaa;   /* 次要文字 (日期、代碼) */
+  --text-inverse: #213547;     /* 反白文字 */
+  
+  --border-color: #444444;     /* 邊框顏色 */
+  --accent-color: #646cff;     /* 重點色 (藍紫) */
+  --shadow-color: rgba(0, 0, 0, 0.3); /* 陰影 */
+
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--text-primary);
+  background-color: var(--bg-main);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,11 +30,29 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--accent-color);
   text-decoration: inherit;
 }
 a:hover {
   color: #535bf2;
+}
+
+/* 淺色模式 (Light Mode) 的覆寫設定 */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg-main: #f0f2f5;        /* 淺灰白背景，不要純白比較護眼 */
+    --bg-card: #ffffff;        /* 純白卡片 */
+    --bg-header: #ffffff;      /* 純白標題列 */
+    --bg-input: #ffffff;
+    --bg-hover: #f5f5f5;
+    
+    --text-primary: #213547;   /* 深藍灰字 */
+    --text-secondary: #666666; /* 灰色字 */
+    --text-inverse: #ffffff;
+    
+    --border-color: #dddddd;   /* 淺灰邊框 */
+    --shadow-color: rgba(0, 0, 0, 0.1); /* 較淡的陰影 */
+  }
 }
 
 body {
@@ -33,6 +66,7 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  color: var(--text-primary);
 }
 
 button {
@@ -42,27 +76,16 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--bg-header); /* 使用 header 色作為按鈕底色 */
+  color: var(--text-primary);
   cursor: pointer;
   transition: border-color 0.25s;
+  box-shadow: 0 2px 4px var(--shadow-color);
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--accent-color);
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
